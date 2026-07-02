@@ -1,0 +1,97 @@
+---
+const links = ['about', 'skills', 'experience', 'projects', 'education', 'contact'];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 border-b border-mc-border font-mono text-xs"
+     style="background: rgba(10,10,10,0.9); backdrop-filter: blur(12px);">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
+    <a href="#hero" class="font-minecraft text-mc-green text-glow-green shrink-0 hover:text-mc-yellow transition-colors"
+       style="font-size:0.5rem; letter-spacing:0.08em;">
+      SRJDEV<span class="animate-blink ml-1">_</span>
+    </a>
+    <div class="hidden md:flex gap-1">
+      {links.map(l => (
+        <a
+          href={`#${l}`}
+          data-nav={l}
+          class="nav-link text-mc-dark-gray border border-transparent px-3 py-1.5 transition-all duration-200
+                 hover:text-mc-green hover:border-mc-dark-gray"
+        >
+          {l}
+        </a>
+      ))}
+    </div>
+    <!-- theme switcher -->
+    <div class="flex items-center gap-1 ml-2 border-l border-mc-border pl-3">
+      {[
+        { id: 'emerald',  color: '#55FF55' },
+        { id: 'diamond',  color: '#55FFFF' },
+        { id: 'gold',     color: '#FFFF55' },
+        { id: 'amethyst', color: '#FF55FF' },
+        { id: 'redstone', color: '#FF5555' },
+        { id: 'lapis',    color: '#5555FF' },
+      ].map(t => (
+        <button
+          data-theme-btn={t.id}
+          title={t.id}
+          class="w-3 h-3 border border-transparent hover:scale-125 transition-transform duration-150"
+          style={`background:${t.color};`}
+        ></button>
+      ))}
+    </div>
+
+    <!-- mobile: just show key links -->
+    <div class="flex md:hidden gap-1">
+      {['projects','contact'].map(l => (
+        <a href={`#${l}`} class="text-mc-dark-gray hover:text-mc-green px-2 py-1 transition-colors">{l}</a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<script>
+  // theme switcher
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-btn]').forEach(btn => {
+    const id = btn.dataset.themeBtn!;
+    btn.addEventListener('click', () => {
+      const theme = id === 'emerald' ? '' : id;
+      if (theme) document.documentElement.setAttribute('data-theme', theme);
+      else document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('mc-theme', theme);
+      // highlight active
+      document.querySelectorAll('[data-theme-btn]').forEach(b =>
+        (b as HTMLElement).style.outline = '');
+      btn.style.outline = '2px solid #fff';
+      btn.style.outlineOffset = '2px';
+    });
+  });
+
+  // restore active indicator on load
+  const saved = localStorage.getItem('mc-theme') || 'emerald';
+  const activeBtn = document.querySelector<HTMLElement>(`[data-theme-btn="${saved || 'emerald'}"]`);
+  if (activeBtn) { activeBtn.style.outline = '2px solid #fff'; activeBtn.style.outlineOffset = '2px'; }
+
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>('[data-nav]');
+  const sections = ['hero','about','skills','experience','projects','education','contact'];
+
+  const io = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        navLinks.forEach(a => {
+          const active = a.dataset.nav === id;
+          a.classList.toggle('text-mc-green', active);
+          a.classList.toggle('text-glow-green', active);
+          a.classList.toggle('text-mc-dark-gray', !active);
+        });
+      });
+    },
+    { threshold: 0.4 }
+  );
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) io.observe(el);
+  });
+</script>

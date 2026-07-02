@@ -1,0 +1,45 @@
+---
+const groups = [
+  { label: 'Languages',      color: 'text-mc-yellow', items: ['JavaScript','TypeScript','Golang'] },
+  { label: 'Web Dev',        color: 'text-mc-aqua',   items: ['React.js','Next.js','Remix.js','Vue.js','Express.js','Node.js','Angular'] },
+  { label: 'Mobile',         color: 'text-mc-green',  items: ['Ionic Framework','Angular', 'React Native'] },
+  { label: 'Database',       color: 'text-mc-red',    items: ['MongoDB','MySQL','Firebase'] },
+  { label: 'State Mgmt',     color: 'text-mc-yellow', items: ['Redux','Zustand'] },
+  { label: 'Version Control',color: 'text-mc-gray',   items: ['Git','GitHub','GitLab'] },
+];
+---
+
+<section id="skills" class="py-24 px-6 border-t border-mc-border section-block">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="section-prompt mb-10 font-mono text-xs text-mc-dark-gray">
+      <span class="text-mc-green text-glow-green">▸</span>
+      <span class="ml-2 uppercase tracking-widest">Technical Skills</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 stagger-group">
+      {groups.map(g => (
+        <div class="stagger-item border border-mc-border bg-[#0a0a0a] p-5
+                    hover:border-mc-green transition-all duration-300 group">
+          <h3 class={`${g.color} font-minecraft mb-4`} style="font-size:0.5rem;letter-spacing:0.08em;">
+            {g.label}
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            {g.items.map(skill => (
+              <span
+                class="font-mono text-xs text-mc-white px-2.5 py-1
+                       border border-[#2a2a2a] bg-[#111]
+                       group-hover:border-[#333]
+                       transition-colors duration-200"
+                style="box-shadow:inset 1px 1px 0 rgba(255,255,255,0.05),inset -1px -1px 0 rgba(0,0,0,0.5);"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

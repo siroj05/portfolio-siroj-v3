@@ -1,0 +1,117 @@
+---
+const experiences = [
+  {
+    period: 'Feb 2026 – Present',
+    badge: 'Current',
+    company: 'PT. Teknologi Operator Prima',
+    type: 'Contract · Tangerang',
+    role: 'Frontend Developer',
+    color: 'text-mc-green',
+    borderColor: 'border-mc-green',
+    points: [
+      'Developed mobile banking apps using Angular, Ionic, and Cordova.',
+      'Contributed to mBanking Kospinus & mBanking Dana Agung.',
+      'Collaborated with backend engineers, QA, and product teams.',
+      'Translated Figma designs into pixel-perfect interfaces.',
+    ],
+  },
+  {
+    period: 'Jan 2023 – Jan 2026',
+    badge: null,
+    company: 'PT. Arthamas Solusindo',
+    type: 'Contract · Jakarta',
+    role: 'Frontend Developer',
+    color: 'text-mc-aqua',
+    borderColor: 'border-mc-aqua',
+    points: [
+      'Developed and maintained ERP web applications.',
+      'Built responsive UIs with React.js, TypeScript, and Tailwind CSS.',
+      'Integrated RESTful APIs with backend teams.',
+      'Improved performance reducing load times significantly.',
+    ],
+  },
+  {
+    period: 'Jul 2021 – Aug 2021',
+    badge: null,
+    company: 'Indonesian Institute of Science (LIPI)',
+    type: 'Internship · Bandung',
+    role: 'Frontend Developer',
+    color: 'text-mc-yellow',
+    borderColor: 'border-mc-yellow',
+    points: [
+      'Built responsive UI with Vue.js for cross-device compatibility.',
+      'Developed dashboard for an automated coffee roasting machine.',
+      'Synced machine data to dashboard in real-time.',
+    ],
+  },
+  {
+    period: 'Aug 2020 – Sep 2021',
+    badge: null,
+    company: 'SEA Lab – Telkom University',
+    type: 'Lab Assistant · Bandung',
+    role: 'Teaching Assistant',
+    color: 'text-mc-gray',
+    borderColor: 'border-mc-gray',
+    points: [
+      'Conducted C/C++ programming classes for students.',
+      'Taught HTML, CSS, and JavaScript.',
+      'One-on-one mentoring and debugging sessions.',
+    ],
+  },
+];
+---
+
+<section id="experience" class="py-24 px-6 border-t border-mc-border section-block" style="background:#0a0a0a;">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="section-prompt mb-10 font-mono text-xs text-mc-dark-gray">
+      <span class="text-mc-green text-glow-green">▸</span>
+      <span class="ml-2 uppercase tracking-widest">Experience</span>
+    </div>
+
+    <div class="relative stagger-group">
+      <!-- timeline line -->
+      <div class="hidden md:block absolute left-[11rem] top-0 bottom-0 w-px bg-mc-border"></div>
+
+      <div class="space-y-10">
+        {experiences.map(exp => (
+          <div class="stagger-item grid grid-cols-1 md:grid-cols-[11rem_1fr] gap-4 md:gap-8 group">
+
+            <!-- Left: date -->
+            <div class="md:text-right md:pt-1">
+              <div class="font-mono text-xs text-mc-dark-gray leading-relaxed">{exp.period}</div>
+              {exp.badge && (
+                <span class={`inline-block mt-1 font-mono text-[0.6rem] px-2 py-0.5 border ${exp.borderColor} ${exp.color}`}>
+                  ● {exp.badge}
+                </span>
+              )}
+            </div>
+
+            <!-- Right: content -->
+            <div class={`relative md:pl-8 border-l-0 md:border-l-2 md:border-mc-border md:group-hover:${exp.borderColor} transition-colors duration-300`}>
+              <!-- dot on timeline -->
+              <div class={`hidden md:block absolute -left-[5px] top-1.5 w-2 h-2 border-2 ${exp.borderColor} bg-mc-bg`}></div>
+
+              <div class="font-minecraft mb-1" style="font-size:0.55rem;line-height:1.8;">
+                <span class={`${exp.color}`}>{exp.company}</span>
+                <span class="text-mc-dark-gray ml-3 font-mono text-xs normal-case" style="font-size:0.65rem;">{exp.type}</span>
+              </div>
+              <div class={`font-mono text-xs mb-3 ${exp.color}`}>{exp.role}</div>
+
+              <ul class="space-y-1.5 font-mono text-xs text-mc-gray">
+                {exp.points.map(p => (
+                  <li class="flex gap-2">
+                    <span class="text-mc-green shrink-0">▸</span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>

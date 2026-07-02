@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Skills from '../components/Skills.astro';
+import Experience from '../components/Experience.astro';
+import Projects from '../components/Projects.astro';
+import Education from '../components/Education.astro';
+import Contact from '../components/Contact.astro';
+---
+
+<Layout>
+  <Nav />
+  <!-- spacer for fixed nav -->
+  <div class="h-10"></div>
+  <Hero />
+  <About />
+  <Skills />
+  <Experience />
+  <Projects />
+  <Education />
+  <Contact />
+</Layout>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function setupAnimations() {
+    gsap.utils.toArray<HTMLElement>('.section-block').forEach(el => {
+      const prompt = el.querySelector('.section-prompt');
+      if (prompt) {
+        gsap.fromTo(prompt,
+          { opacity: 0, x: -12 },
+          {
+            opacity: 1, x: 0, duration: 0.4, ease: 'power2.out',
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+          }
+        );
+      }
+
+      el.querySelectorAll<HTMLElement>('.stagger-group').forEach(group => {
+        gsap.fromTo(group.querySelectorAll('.stagger-item'),
+          { opacity: 0, y: 14 },
+          {
+            opacity: 1, y: 0, duration: 0.35, stagger: 0.12, ease: 'power2.out',
+            scrollTrigger: { trigger: group, start: 'top 90%', once: true },
+          }
+        );
+      });
+    });
+  }
+
+  // run after full page load so image heights are settled
+  if (document.readyState === 'complete') {
+    setupAnimations();
+  } else {
+    window.addEventListener('load', () => {
+      setupAnimations();
+      ScrollTrigger.refresh();
+    });
+  }
+</script>
