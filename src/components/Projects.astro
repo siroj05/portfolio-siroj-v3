@@ -1,4 +1,6 @@
 ---
+import SectionLabel from './SectionLabel.astro';
+
 const projects: Array<{
   title: string;
   description: string;
@@ -9,16 +11,47 @@ const projects: Array<{
   private?: boolean;
 }> = [
   {
-    title: 'SOALIN.ID',
+    title: 'Soalin.id',
     description:
-      'Platform AI untuk guru SD, SMP, dan SMA Indonesia. Generate soal ujian lengkap dengan kunci jawaban & pembahasan sesuai Kurikulum Merdeka 2024 — dalam hitungan menit.',
+      'An AI platform for Indonesian primary and secondary school teachers. Generates complete exam papers with answer keys and worked explanations, aligned with Kurikulum Merdeka 2024, in minutes.',
     images: ['/projects/soalin.jpeg'],
     repo: null,
     demo: 'https://soalin.id',
     stack: ['Next.js', 'Tailwind CSS', 'Zustand', 'Framer Motion', 'Golang', 'PostgreSQL', 'ChatGPT 4o-mini', 'Midtrans'],
   },
   {
-    title: 'POKÉMON POKÉDEX',
+    title: 'Open Model',
+    description:
+      'An AI API aggregator for Indonesian developers. One API key to reach Claude, GPT, Gemini, and DeepSeek through a single endpoint. Top up credit in Rupiah and pay only for the tokens you use.',
+    images: [
+      '/projects/open-model/open-model-1.jpeg',
+      '/projects/open-model/open-model-2.jpeg',
+    ],
+    repo: null,
+    demo: 'https://open-model.43.157.248.30.sslip.io/dashboard',
+    stack: ['Next.js', 'Tailwind CSS', 'Golang', 'PostgreSQL', 'LiteLLM', 'Docker', 'Payment Gateway (soon)'],
+  },
+  {
+    title: 'Financial ERP System',
+    description:
+      'A financial ERP system developed for PT Arthamas Solusindo. Designed to manage transactions, budgeting, and generate financial reports efficiently.',
+    images: [],
+    private: true,
+    repo: null,
+    demo: null,
+    stack: ['Remix.js', 'TypeScript', 'Tailwind CSS', 'Shadcn UI', 'Zustand'],
+  },
+  {
+    title: 'Roxy Square',
+    description:
+      'Company profile website for Roxy Square Jakarta — a one-stop business place in West Jakarta featuring office space, retail, and training facilities.',
+    images: ['/projects/roxysquare.jpeg'],
+    repo: null,
+    demo: 'https://roxysquarejakarta.com/',
+    stack: ['React', 'Vite', 'Tailwind CSS'],
+  },
+  {
+    title: 'Pokémon Pokédex',
     description:
       'Pokédex app powered by PokéAPI. Browse the full Pokémon list, search by name, and view detailed stats — type, abilities, base stats, and evolution chain.',
     images: [
@@ -30,26 +63,7 @@ const projects: Array<{
     stack: ['Next.js', 'Tailwind CSS', 'PokéAPI'],
   },
   {
-    title: 'FINANCIAL ERP SYSTEM',
-    description:
-      'A financial ERP system developed for PT Arthamas Solusindo. Designed to manage transactions, budgeting, and generate financial reports efficiently.',
-    images: [],
-    private: true,
-    repo: null,
-    demo: null,
-    stack: ['Remix.js', 'TypeScript', 'Tailwind CSS', 'Shadcn UI', 'Zustand'],
-  },
-  {
-    title: 'ROXY SQUARE',
-    description:
-      'Company profile website for Roxy Square Jakarta — a one-stop business place in West Jakarta featuring office space, retail, and training facilities.',
-    images: ['/projects/roxysquare.jpeg'],
-    repo: null,
-    demo: 'https://roxysquarejakarta.com/',
-    stack: ['React', 'Vite', 'Tailwind CSS'],
-  },
-  {
-    title: 'HOYOLAB CLONE',
+    title: 'Hoyolab Clone',
     description:
       'A Hoyolab-inspired social platform clone with user registration, login, posting, and comment features.',
     images: ['/projects/hoyolab.webp'],
@@ -57,165 +71,131 @@ const projects: Array<{
     demo: 'https://siroj-hoyolab-clone.netlify.app/home',
     stack: ['React', 'Vite', 'TypeScript', 'Tailwind CSS', 'Redux', 'Express.js', 'MongoDB'],
   },
-  {
-    title: 'OPEN MODEL',
-    description:
-      'API aggregator AI untuk developer Indonesia. Satu API key untuk akses Claude, GPT, Gemini, dan DeepSeek lewat satu endpoint. Topup kredit pakai Rupiah, bayar sesuai token yang dipakai.',
-    images: [
-      '/projects/open-model/open-model-1.jpeg',
-      '/projects/open-model/open-model-2.jpeg',
-    ],
-    repo: null,
-    demo: 'https://open-model.43.157.248.30.sslip.io/dashboard',
-    stack: ['Next.js', 'Tailwind CSS', 'Golang', 'PostgreSQL', 'LiteLLM', 'Docker', 'Payment Gateway (soon)'],
-  },
 ];
+
+const host = (url: string) => new URL(url).hostname.replace(/^www\./, '');
 ---
 
-<section id="projects" class="py-24 px-6 border-t border-mc-border section-block" style="background:#0a0a0a;">
+<section id="projects" class="py-24 md:py-32 px-4 sm:px-6 border-t border-line section-block">
   <div class="max-w-6xl mx-auto">
-
-    <div class="section-prompt mb-10 font-mono text-xs text-mc-dark-gray">
-      <span class="text-mc-green text-glow-green">▸</span>
-      <span class="ml-2 uppercase tracking-widest">Projects</span>
+    <div class="grid grid-cols-1 md:grid-cols-[12rem_1fr] gap-8 md:gap-12 mb-14 md:mb-20">
+      <div><SectionLabel label="Projects" /></div>
+      <p class="font-serif text-ink leading-[1.25]" style="font-size:clamp(1.6rem,3.4vw,2.6rem);">
+        Things I've built, at work and <em class="text-dusk">after hours</em>.
+      </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 stagger-group">
+    <div class="space-y-20 md:space-y-28">
       {projects.map((p, pi) => (
-        <article
-          class="project-card stagger-item group border border-mc-border bg-[#0d0d0d]
-                 hover:border-mc-green hover:shadow-glow-green transition-all duration-300"
-          style="box-shadow: 3px 3px 0 #111;"
-        >
-          <!-- Image / Slideshow -->
-          <div class="relative overflow-hidden aspect-video bg-[#161616]" data-slideshow={pi}>
-            {p.private ? (
-              <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#0d0d0d] border-b border-mc-border">
-                <div class="font-minecraft text-mc-dark-gray text-center" style="font-size:0.5rem;line-height:2;">
-                  <div class="text-mc-green text-glow-green mb-2" style="font-size:0.65rem;">■</div>
-                  PRIVATE PROJECT
+        <article class="stagger-group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+          <!-- frame -->
+          <div class:list={['stagger-item lg:col-span-7 group', pi % 2 === 1 && 'lg:order-2']}>
+            <div class="frame relative overflow-hidden aspect-[16/10] rounded-[4px] border border-line bg-night-3"
+                 data-slideshow={pi}>
+              {p.private ? (
+                <div class="absolute inset-0 flex flex-col items-center justify-center gap-5 text-center px-6">
+                  <svg width="120" height="64" viewBox="0 0 120 64" aria-hidden="true">
+                    <rect x="8"  y="18" width="30" height="46" style="fill:rgb(var(--line))" />
+                    <rect x="44" y="4"  width="34" height="60" style="fill:rgb(var(--line))" />
+                    <rect x="84" y="26" width="28" height="38" style="fill:rgb(var(--line))" />
+                    {[0,1,2,3,4,5].map(r => [0,1,2].map(c => (
+                      <rect x={51 + c * 9} y={12 + r * 8} width="4" height="5"
+                            style={`fill:${r === 2 && c === 1 ? 'rgb(var(--lamp))' : 'rgb(var(--faint) / .35)'}`} />
+                    )))}
+                  </svg>
+                  <div>
+                    <div class="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-muted">Client work</div>
+                    <div class="text-sm text-faint mt-1">Source and preview aren't public.</div>
+                  </div>
                 </div>
-                <div class="font-mono text-[0.6rem] text-mc-dark-gray px-4 text-center leading-relaxed">
-                  // source code & preview<br/>not publicly available
+              ) : p.images.map((src, ii) => (
+                <img
+                  src={src}
+                  alt={`${p.title} screenshot ${ii + 1}`}
+                  data-slide={ii}
+                  class="absolute inset-0 w-full h-full object-cover object-top transition-[opacity,transform] duration-700 ease-out group-hover:scale-[1.02]"
+                  style={ii === 0 ? 'opacity:1;' : 'opacity:0;'}
+                  loading="lazy"
+                />
+              ))}
+
+              {!p.private && <div class="dusk-tint absolute inset-0 pointer-events-none"></div>}
+
+              {p.images.length > 1 && (
+                <div class="absolute bottom-3 right-3 flex gap-1.5 z-10" data-dots={pi}>
+                  {p.images.map((_, ii) => (
+                    <span data-dot={ii}
+                          class={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${ii === 0 ? 'bg-lamp' : 'bg-white/30'}`}></span>
+                  ))}
                 </div>
-              </div>
-            ) : p.images.map((src, ii) => (
-              <img
-                src={src}
-                alt={`${p.title} screenshot ${ii + 1}`}
-                data-slide={ii}
-                class="absolute inset-0 w-full h-full object-cover object-top
-                       grayscale brightness-75
-                       group-hover:grayscale-0 group-hover:brightness-100
-                       transition-all duration-500 ease-out"
-                style={ii === 0 ? 'opacity:1;' : 'opacity:0;'}
-                loading="lazy"
-              />
-            ))}
-
-            <!-- slide dots (only when >1 image) -->
-            {p.images.length > 1 && (
-              <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"
-                   data-dots={pi}>
-                {p.images.map((_, ii) => (
-                  <span
-                    data-dot={ii}
-                    class={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${ii === 0 ? 'bg-mc-green' : 'bg-mc-dark-gray'}`}
-                  ></span>
-                ))}
-              </div>
-            )}
-
-            <!-- overlay -->
-            <div class="absolute inset-0 bg-mc-bg/40 group-hover:bg-transparent
-                        transition-colors duration-500 pointer-events-none"></div>
-
-            <!-- LIVE badge -->
-            {p.demo && (
-              <a
-                href={p.demo}
-                target="_blank"
-                class="absolute top-2 right-2 font-mono text-[0.6rem] px-2 py-1
-                       bg-mc-bg/80 border border-mc-green text-mc-green text-glow-green
-                       opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                       hover:bg-mc-green hover:text-mc-bg z-10"
-              >
-                LIVE ↗
-              </a>
-            )}
+              )}
+            </div>
           </div>
 
-          <!-- Content -->
-          <div class="p-4">
-            <h3 class="font-minecraft text-mc-yellow group-hover:text-glow-yellow
-                       transition-all duration-300 mb-2"
-                style="font-size:0.55rem;line-height:1.8;letter-spacing:0.05em;">
-              {p.title}
-            </h3>
+          <!-- text -->
+          <div class:list={['stagger-item lg:col-span-5', pi % 2 === 1 && 'lg:order-1']}>
+            <div class="font-serif italic text-lamp text-lg">{String(pi + 1).padStart(2, '0')}</div>
+            <h3 class="font-serif text-3xl md:text-4xl text-ink mt-2 leading-tight">{p.title}</h3>
+            <p class="text-muted leading-relaxed mt-4">{p.description}</p>
 
-            <p class="font-mono text-mc-gray text-xs leading-relaxed mb-4">
-              {p.description}
+            <p class="font-mono text-[0.72rem] leading-relaxed text-faint mt-6">
+              {p.stack.join(' / ')}
             </p>
 
-            <div class="flex flex-wrap gap-1.5 mb-4">
-              {p.stack.map(s => (
-                <span class="font-mono text-[0.65rem] px-2 py-0.5 text-mc-white
-                             border border-[#2a2a2a] bg-[#111]"
-                      style="box-shadow:inset 1px 1px 0 rgba(255,255,255,0.05),inset -1px -1px 0 rgba(0,0,0,0.5);">
-                  {s}
-                </span>
-              ))}
-            </div>
-
-            <div class="flex flex-col gap-1.5">
-              {p.demo && (
-                <a href={p.demo} target="_blank"
-                   class="inline-flex items-center gap-1.5 font-mono text-xs
-                          text-mc-dark-gray hover:text-mc-green hover:text-glow-green
-                          transition-all duration-200 group/link">
-                  <span class="text-mc-green group-hover/link:text-glow-green">▸</span>
-                  <span>{p.demo.replace('https://', '')}</span>
-                  <span class="opacity-0 group-hover/link:opacity-100 transition-opacity">↗</span>
-                </a>
-              )}
-              {p.repo && (
-                <a href={p.repo} target="_blank"
-                   class="inline-flex items-center gap-1.5 font-mono text-xs
-                          text-mc-dark-gray hover:text-mc-aqua
-                          transition-all duration-200 group/repo">
-                  <span class="text-mc-dark-gray group-hover/repo:text-mc-aqua">▸</span>
-                  <span>{p.repo.replace('https://github.com/', 'github.com/')}</span>
-                  <span class="opacity-0 group-hover/repo:opacity-100 transition-opacity">↗</span>
-                </a>
-              )}
-            </div>
+            {(p.demo || p.repo) && (
+              <div class="flex flex-wrap gap-x-6 gap-y-2 mt-6 text-sm">
+                {p.demo && (
+                  <a href={p.demo} target="_blank" rel="noopener" class="link-line text-ink hover:text-lamp-soft">
+                    {host(p.demo).length > 26 ? 'Live demo' : host(p.demo)} <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+                {p.repo && (
+                  <a href={p.repo} target="_blank" rel="noopener" class="link-line text-muted hover:text-ink">
+                    Source <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </div>
+            )}
           </div>
+
         </article>
       ))}
     </div>
-
   </div>
 </section>
 
-<script>
-  // Auto-slideshow for cards with multiple images
-  document.querySelectorAll<HTMLElement>('[data-slideshow]').forEach(container => {
-    const idx   = Number(container.dataset.slideshow);
-    const imgs  = container.querySelectorAll<HTMLImageElement>('[data-slide]');
-    const dots  = document.querySelector(`[data-dots="${idx}"]`);
+<style>
+  /* screenshots sit in dusk light, and come to full colour on hover */
+  .dusk-tint {
+    background: linear-gradient(to top, rgb(var(--night) / .55), rgb(var(--dusk-deep) / .18));
+    mix-blend-mode: multiply;
+    transition: opacity .6s ease;
+  }
+  .frame:hover .dusk-tint { opacity: 0; }
+  .frame { transition: border-color .4s ease, box-shadow .4s ease; }
+  .frame:hover {
+    border-color: rgb(var(--lamp) / .4);
+    box-shadow: 0 20px 60px -20px rgb(var(--lamp) / .18);
+  }
+</style>
 
-    if (imgs.length < 2) return;
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-slideshow]').forEach(container => {
+    const idx  = container.dataset.slideshow;
+    const imgs = container.querySelectorAll<HTMLImageElement>('[data-slide]');
+    const dots = document.querySelector(`[data-dots="${idx}"]`);
+    if (imgs.length < 2 || reduce) return;
 
     let current = 0;
-
     setInterval(() => {
       imgs[current].style.opacity = '0';
-      dots?.querySelector(`[data-dot="${current}"]`)?.classList.replace('bg-mc-green', 'bg-mc-dark-gray');
-
+      dots?.querySelector(`[data-dot="${current}"]`)?.classList.replace('bg-lamp', 'bg-white/30');
       current = (current + 1) % imgs.length;
-
       imgs[current].style.opacity = '1';
-      dots?.querySelector(`[data-dot="${current}"]`)?.classList.replace('bg-mc-dark-gray', 'bg-mc-green');
-    }, 3000);
+      dots?.querySelector(`[data-dot="${current}"]`)?.classList.replace('bg-white/30', 'bg-lamp');
+    }, 3500);
   });
 </script>

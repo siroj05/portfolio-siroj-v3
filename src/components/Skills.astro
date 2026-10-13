@@ -1,45 +1,36 @@
 ---
+import SectionLabel from './SectionLabel.astro';
+
 const groups = [
-  { label: 'Languages',      color: 'text-mc-yellow', items: ['JavaScript','TypeScript','Golang'] },
-  { label: 'Web Dev',        color: 'text-mc-aqua',   items: ['React.js','Next.js','Remix.js','Vue.js','Express.js','Node.js','Angular'] },
-  { label: 'Mobile',         color: 'text-mc-green',  items: ['Ionic Framework','Angular', 'React Native'] },
-  { label: 'Database',       color: 'text-mc-red',    items: ['MongoDB','MySQL','Firebase'] },
-  { label: 'State Mgmt',     color: 'text-mc-yellow', items: ['Redux','Zustand'] },
-  { label: 'Version Control',color: 'text-mc-gray',   items: ['Git','GitHub','GitLab'] },
+  { label: 'Languages',       items: ['JavaScript', 'TypeScript', 'Golang'] },
+  { label: 'Web',             items: ['React.js', 'Next.js', 'Remix.js', 'Vue.js', 'Angular', 'Express.js', 'Node.js'] },
+  { label: 'Mobile',          items: ['Ionic Framework', 'Angular', 'React Native'] },
+  { label: 'Database',        items: ['MongoDB', 'MySQL', 'Firebase'] },
+  { label: 'State',           items: ['Redux', 'Zustand'] },
+  { label: 'Version control', items: ['Git', 'GitHub', 'GitLab'] },
 ];
 ---
 
-<section id="skills" class="py-24 px-6 border-t border-mc-border section-block">
-  <div class="max-w-6xl mx-auto">
+<section id="skills" class="py-24 md:py-32 px-4 sm:px-6 border-t border-line section-block">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[12rem_1fr] gap-8 md:gap-12">
+    <div><SectionLabel label="Skills" /></div>
 
-    <div class="section-prompt mb-10 font-mono text-xs text-mc-dark-gray">
-      <span class="text-mc-green text-glow-green">▸</span>
-      <span class="ml-2 uppercase tracking-widest">Technical Skills</span>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 stagger-group">
+    <dl class="stagger-group">
       {groups.map(g => (
-        <div class="stagger-item border border-mc-border bg-[#0a0a0a] p-5
-                    hover:border-mc-green transition-all duration-300 group">
-          <h3 class={`${g.color} font-minecraft mb-4`} style="font-size:0.5rem;letter-spacing:0.08em;">
+        <div class="stagger-item group grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-1 sm:gap-6 py-5 border-b border-line first:border-t">
+          <dt class="font-mono text-[0.72rem] uppercase tracking-[0.14em] text-faint pt-1
+                     group-hover:text-lamp transition-colors duration-300">
             {g.label}
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {g.items.map(skill => (
-              <span
-                class="font-mono text-xs text-mc-white px-2.5 py-1
-                       border border-[#2a2a2a] bg-[#111]
-                       group-hover:border-[#333]
-                       transition-colors duration-200"
-                style="box-shadow:inset 1px 1px 0 rgba(255,255,255,0.05),inset -1px -1px 0 rgba(0,0,0,0.5);"
-              >
-                {skill}
+          </dt>
+          <dd class="text-lg text-ink leading-relaxed">
+            {g.items.map((s, i) => (
+              <span class="inline-block whitespace-nowrap mr-2">
+                {s}{i < g.items.length - 1 && <span class="text-faint ml-2" aria-hidden="true">·</span>}
               </span>
             ))}
-          </div>
+          </dd>
         </div>
       ))}
-    </div>
-
+    </dl>
   </div>
 </section>

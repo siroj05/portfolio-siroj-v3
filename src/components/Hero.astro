@@ -1,151 +1,283 @@
 ---
+// Skyline is generated at build time with a seeded RNG so the markup is stable.
+let seed = 11;
+const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+
+const W = 1440;
+const H = 360;
+const GROUND = 334;
+
+type Block = { x: number; w: number; h: number };
+type Win = { x: number; y: number; cool: boolean };
+
+// far row: hazy, lit only by the sky
+const far: Block[] = [];
+for (let x = -30; x < W; ) {
+  const w = 46 + rand() * 70;
+  const h = 110 + rand() * 150;
+  far.push({ x, w, h });
+  x += w + rand() * 8;
+}
+
+// near row: dark silhouettes with windows
+const near: (Block & { antenna: boolean })[] = [];
+const windows: Win[] = [];
+for (let x = -12; x < W; ) {
+  const tall = rand() > 0.82;
+  const w = 58 + rand() * 88;
+  const h = 70 + rand() * (tall ? 210 : 130);
+  near.push({ x, w, h, antenna: tall && h > 200 });
+
+  if (rand() > 0.2) {
+    const cols = Math.floor((w - 14) / 11);
+    const rows = Math.floor((h - 22) / 15);
+    const padX = (w - cols * 11) / 2 + 3;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (rand() < 0.82) {
+          windows.push({ x: x + padX + c * 11, y: GROUND - h + 14 + r * 15, cool: rand() < 0.18 });
+        }
+      }
+    }
+  }
+  x += w + rand() * 5;
+}
+
+const lamps = [90, 380, 670, 960, 1250];
+
+// stars thin out toward the horizon, where the city glow washes them away
+const stars = Array.from({ length: 140 }, () => {
+  const top = Math.pow(rand(), 1.6) * 62;
+  return {
+    left: rand() * 100,
+    top,
+    size: rand() < 0.08 ? 2.4 : rand() < 0.4 ? 1.6 : 1,
+    alpha: (0.85 - top / 90) * (0.45 + rand() * 0.55),
+    twinkle: rand() < 0.3,
+    delay: rand() * 6,
+    dur: 3 + rand() * 4,
+  };
+});
 ---
 
-<section id="hero" class="min-h-screen flex items-center px-6 py-20">
-  <div class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<section
+  id="hero"
+  class="relative min-h-[100svh] flex flex-col overflow-hidden"
+  style="background: var(--sky);"
+>
+  <!-- stars -->
+  <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+    {stars.map(st => (
+      <span
+        class:list={['star', st.twinkle && 'twinkle']}
+        style={`left:${st.left}%;top:${st.top}%;width:${st.size}px;height:${st.size}px;--a:${st.alpha.toFixed(2)};animation-delay:${st.delay.toFixed(2)}s;animation-duration:${st.dur.toFixed(2)}s;`}
+      ></span>
+    ))}
+  </div>
 
-    <!-- Left: Terminal -->
-    <div class="w-full">
-      <div
-        class="border border-mc-border transition-shadow duration-500 hover:shadow-glow-green"
-        style="box-shadow: 4px 4px 0 var(--accent-dark), 0 0 40px var(--accent-subtle);"
-      >
-        <!-- Title bar -->
-        <div class="flex items-center gap-2 px-4 py-2 bg-[#161616] border-b border-mc-border">
-          <span class="w-3 h-3 bg-mc-red   rounded-sm"></span>
-          <span class="w-3 h-3 bg-mc-yellow rounded-sm"></span>
-          <span class="w-3 h-3 bg-mc-green  rounded-sm"></span>
-          <span class="ml-4 font-mono text-xs text-mc-dark-gray select-none">portfolio.exe</span>
-          <span class="ml-auto font-mono text-xs text-mc-dark-gray select-none">[ _ □ X ]</span>
-        </div>
+  <!-- moon -->
+  <div class="moon-wrap absolute pointer-events-none right-[7%] top-[22%] md:right-[11%] md:top-[17%]" aria-hidden="true">
+    <div class="moon-halo"></div>
+    <svg class="moon relative" viewBox="0 0 100 100">
+      <defs>
+        <mask id="moon-cut">
+          <rect width="100" height="100" fill="#fff" />
+          <circle cx="66" cy="38" r="40" fill="#000" />
+        </mask>
+        <radialGradient id="moon-fill" cx="35%" cy="60%" r="70%">
+          <stop offset="0%" stop-color="#fff4d6" />
+          <stop offset="100%" stop-color="#e9d7b0" />
+        </radialGradient>
+      </defs>
+      <!-- the dark side: opaque so stars don't show through, faintly lit by earthshine -->
+      <circle cx="50" cy="50" r="43.5" style="fill:var(--moon-dark)" />
+      <circle cx="50" cy="50" r="43.5" fill="#b9a7e6" opacity="0.06" />
+      <circle cx="50" cy="50" r="44" fill="url(#moon-fill)" mask="url(#moon-cut)" />
+    </svg>
+  </div>
 
-        <!-- Terminal body -->
-        <div class="bg-[#0a0a0a] px-6 py-8 font-mono text-sm leading-relaxed">
-          <div class="flex items-center gap-0 mb-1">
-            <span class="text-mc-dark-gray">C:\Users\visitor</span>
-            <span class="text-mc-green text-glow-green">&gt;</span>
-            <span id="typed-cmd" class="text-mc-white ml-1"></span>
-            <span id="cursor-type" class="inline-block w-[9px] h-[1em] bg-mc-green ml-0.5 animate-blink align-middle"></span>
-          </div>
-
-          <div id="output" class="mt-5" style="opacity:0; transform:translateY(10px);">
-            <div class="mb-5">
-              <div
-                class="inline-block px-4 py-3 border border-mc-green transition-all duration-300 hover:shadow-glow-yellow"
-                style="box-shadow: 3px 3px 0 var(--accent-dark);"
-              >
-                <h1 class="font-minecraft text-glow-yellow" style="line-height:1.8;">
-                  <span class="block text-mc-yellow" style="font-size:clamp(0.8rem,2.5vw,1.3rem);">SIROOJUDDIN</span>
-                  <span class="block text-mc-yellow" style="font-size:clamp(0.8rem,2.5vw,1.3rem);margin-top:0.3rem;">APENDI</span>
-                </h1>
-                <div class="mt-2 flex items-center gap-2">
-                  <span class="inline-block w-2 h-2 bg-mc-green animate-blink" style="box-shadow:0 0 5px var(--accent);"></span>
-                  <span class="font-mono text-mc-green text-xs text-glow-green">Frontend Developer</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-1.5 pl-2 border-l-2 border-mc-border text-xs">
-              <div class="desc-line" style="opacity:0;transform:translateX(-8px);">
-                <span class="text-mc-green">&gt;</span>
-                <span class="text-mc-white ml-2">3+ Years of Experience</span>
-              </div>
-              <div class="desc-line" style="opacity:0;transform:translateX(-8px);">
-                <span class="text-mc-green">&gt;</span>
-                <span class="text-mc-gray ml-2">React.js · TypeScript · Golang · Angular</span>
-              </div>
-              <div class="desc-line" style="opacity:0;transform:translateX(-8px);">
-                <span class="text-mc-green">&gt;</span>
-                <span class="text-mc-gray ml-2">Tangerang, Banten <span class="text-mc-dark-gray">// ID</span></span>
-              </div>
-            </div>
-
-            <div class="mt-5" id="final-prompt" style="opacity:0;">
-              <span class="text-mc-dark-gray text-xs">C:\Users\visitor</span>
-              <span class="text-mc-green text-glow-green text-xs">&gt;</span>
-              <span class="inline-block w-[9px] h-[1em] bg-mc-green ml-1 animate-blink align-middle" style="box-shadow:0 0 5px var(--accent);"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right: tagline + CTA + stats -->
-    <div id="hero-right" class="flex flex-col gap-8" style="opacity:0;transform:translateX(20px);">
-
-      <div>
-        <p class="font-minecraft text-mc-dark-gray mb-3" style="font-size:0.45rem;letter-spacing:0.15em;">// ABOUT ME</p>
-        <h2 class="font-minecraft text-mc-white leading-relaxed" style="font-size:clamp(0.75rem,1.8vw,1rem);">
-          Building fast,<br/>
-          <span class="text-mc-green text-glow-green">clean</span> &<br/>
-          <span class="text-mc-yellow text-glow-yellow">scalable</span><br/>
-          web & mobile apps.
-        </h2>
-      </div>
-
-      <!-- Stats -->
-      <div class="grid grid-cols-3 gap-4 border-t border-b border-mc-border py-6">
-        {[
-          { value: '3+',  label: 'Years exp' },
-          { value: '2',   label: 'Companies' },
-          { value: '10+', label: 'Projects' },
-        ].map(s => (
-          <div class="text-center">
-            <div class="font-minecraft text-mc-green text-glow-green" style="font-size:clamp(0.9rem,2vw,1.4rem);">{s.value}</div>
-            <div class="font-mono text-mc-dark-gray text-xs mt-1">{s.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <!-- CTA -->
-      <div class="flex flex-wrap gap-3">
-        <a
-          href="#projects"
-          class="font-mono text-xs px-5 py-2.5 bg-mc-green text-mc-bg font-bold
-                 hover:shadow-glow-green transition-all duration-200
-                 border border-mc-green"
-        >
-          VIEW PROJECTS ↓
-        </a>
-        <a
-          href="#contact"
-          class="font-mono text-xs px-5 py-2.5 text-mc-green border border-mc-green
-                 hover:bg-mc-green hover:text-mc-bg transition-all duration-200"
-        >
-          CONTACT ME
-        </a>
-        <a
-          href="/CV Siroojuddin Apendi.pdf"
-          download="CV Siroojuddin Apendi.pdf"
-          class="font-mono text-xs px-5 py-2.5 text-mc-gray border border-mc-border
-                 hover:text-mc-white hover:border-mc-gray transition-all duration-200"
-        >
-          ↓ RESUME
-        </a>
-      </div>
-
-      <!-- scroll hint -->
-      <p id="scroll-hint" class="font-mono text-xs text-mc-dark-gray" style="opacity:0;">
-        <span class="animate-float inline-block">▼ scroll to explore</span>
+  <div class="relative z-10 flex-1 flex items-center px-4 sm:px-6 pt-28 pb-10">
+    <div class="max-w-6xl mx-auto w-full">
+      <p class="hero-in font-mono text-[0.72rem] tracking-wide text-muted flex flex-wrap gap-x-3 gap-y-1">
+        <span>Frontend Developer</span>
+        <span class="text-faint">/</span>
+        <span>Tangerang, ID</span>
+        <span class="text-faint">/</span>
+        <span>
+          <span id="local-clock" class="text-lamp-soft">--:--</span> WIB
+        </span>
       </p>
+
+      <h1 class="hero-name hero-in font-serif font-normal text-ink mt-6 leading-[0.95] tracking-[-0.02em]">
+        Siroojuddin<br />
+        <em class="text-dusk">Apendi</em>
+      </h1>
+
+      <p class="hero-in mt-8 max-w-xl text-muted text-[1.05rem] leading-relaxed">
+        Three years of shipping web and mobile apps: mobile banking, ERP dashboards,
+        and a few products of my own. Mostly
+        <span class="text-ink">React, TypeScript, Angular</span> and <span class="text-ink">Go</span>.
+      </p>
+
+      <div class="hero-in mt-10 flex flex-wrap items-center gap-x-7 gap-y-4 text-sm">
+        <a href="#projects"
+           class="cta inline-flex items-center gap-2 px-5 py-3 rounded-[3px] bg-lamp text-night font-medium
+                  hover:bg-lamp-soft transition-colors duration-200">
+          See the work
+          <span aria-hidden="true">↓</span>
+        </a>
+        <a href="#contact" class="link-line text-ink hover:text-lamp-soft">
+          Get in touch
+        </a>
+        <a href="/CV Siroojuddin Apendi.pdf" download="CV Siroojuddin Apendi.pdf"
+           class="link-line text-muted hover:text-ink">
+          Resume (PDF)
+        </a>
+      </div>
 
     </div>
   </div>
+
+  <!-- skyline -->
+  <svg
+    class="relative block w-full shrink-0"
+    style="height:clamp(200px,40vh,400px);overflow:hidden;"
+    viewBox={`0 0 ${W} ${H}`}
+    preserveAspectRatio="xMidYMax slice"
+    aria-hidden="true"
+  >
+    <defs>
+      <radialGradient id="lamp-glow">
+        <stop offset="0%"  stop-color="#ffdf9e" stop-opacity="0.95" />
+        <stop offset="35%" stop-color="#f6c56a" stop-opacity="0.35" />
+        <stop offset="100%" stop-color="#f6c56a" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="lamp-cone" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f6c56a" stop-opacity="0.16" />
+        <stop offset="100%" stop-color="#f6c56a" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+
+    <g style="fill:var(--far)" opacity="0.75">
+      {far.map(b => <rect x={b.x} y={GROUND - b.h} width={b.w} height={b.h} />)}
+    </g>
+
+    <g style="fill:rgb(var(--night))">
+      {near.map(b => (
+        <>
+          <rect x={b.x} y={GROUND - b.h} width={b.w} height={b.h} />
+          {b.antenna && (
+            <>
+              <rect x={b.x + b.w / 2 - 1} y={GROUND - b.h - 30} width="2" height="30" />
+              <circle class="beacon" cx={b.x + b.w / 2} cy={GROUND - b.h - 31} r="2.4" />
+            </>
+          )}
+        </>
+      ))}
+    </g>
+
+    <g>
+      {windows.map(w => (
+        <rect class={`sky-win${w.cool ? ' cool' : ''}`} x={w.x} y={w.y} width="5" height="7" />
+      ))}
+    </g>
+
+    <!-- road -->
+    <rect x="0" y={GROUND} width={W} height={H - GROUND} style="fill:rgb(var(--night))" />
+
+    {lamps.map((x, i) => (
+      <g>
+        <polygon class="lamp-light" style={`animation-delay:${0.6 + i * 0.25}s`}
+                 points={`${x + 12},${GROUND - 64} ${x - 40},${H} ${x + 64},${H}`} fill="url(#lamp-cone)" />
+        <rect x={x - 1} y={GROUND - 66} width="2.5" height="76" style="fill:rgb(var(--night) / .6)" />
+        <path d={`M${x} ${GROUND - 66} q 2 -6 12 -4`} style="stroke:rgb(var(--night) / .6)" stroke-width="2.5" fill="none" />
+        <circle class="lamp-light" style={`animation-delay:${0.6 + i * 0.25}s`}
+                cx={x + 12} cy={GROUND - 66} r="34" fill="url(#lamp-glow)" />
+        <circle cx={x + 12} cy={GROUND - 66} r="2.6" fill="#ffe9bd" />
+      </g>
+    ))}
+  </svg>
 </section>
+
+<style>
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: #f3ecff;
+    opacity: var(--a);
+  }
+  .star.twinkle { animation: twinkle ease-in-out infinite; }
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--a); }
+    50%      { opacity: calc(var(--a) * 0.2); }
+  }
+
+  .moon-wrap { width: clamp(64px, 9vw, 120px); aspect-ratio: 1; }
+  .moon { width: 100%; height: 100%; transform: rotate(-18deg); }
+  .moon-halo {
+    position: absolute;
+    inset: -90%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,236,196,.16) 0%, rgba(185,167,230,.08) 35%, transparent 65%);
+  }
+  @media (max-width: 767px) {
+    /* keep the crescent clear of the name on narrow screens */
+    .moon-wrap { opacity: .85; width: 56px; }
+  }
+
+  .sky-win      { fill: var(--win-off); transition: fill .9s ease; }
+  .sky-win.on   { fill: rgb(var(--lamp)); }
+  .sky-win.cool.on { fill: var(--win-cool); }
+
+  .hero-name { font-size: clamp(2.9rem, 9vw, 7.5rem); }
+  .cta { box-shadow: 0 0 28px rgb(var(--lamp) / .25); }
+
+  .beacon { fill: #e8828c; animation: beacon 2.4s steps(1) infinite; }
+  @keyframes beacon { 0%, 60% { opacity: 1; } 61%, 100% { opacity: .15; } }
+
+  /* sodium lamps sputter before they settle */
+  .lamp-light { opacity: 0; animation: lamp-on 1.4s ease-out forwards; }
+  @keyframes lamp-on {
+    0%   { opacity: 0; }
+    12%  { opacity: .8; }
+    20%  { opacity: .1; }
+    34%  { opacity: .65; }
+    44%  { opacity: .2; }
+    100% { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lamp-light { opacity: 1; }
+  }
+</style>
 
 <script>
   import gsap from 'gsap';
-  import { TextPlugin } from 'gsap/TextPlugin';
-  gsap.registerPlugin(TextPlugin);
 
-  const tl = gsap.timeline({ delay: 0.5 });
+  const clock = document.getElementById('local-clock');
+  const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit' });
+  const tick = () => { if (clock) clock.textContent = fmt.format(new Date()); };
+  tick();
+  setInterval(tick, 20_000);
 
-  tl
-    .to('#typed-cmd', { duration: 0.6, text: { value: 'whoami', delimiter: '' }, ease: 'none' })
-    .to('#cursor-type', { opacity: 0, duration: 0.1 }, '+=0.25')
-    .to('#output', { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, '+=0.1')
-    .to('.desc-line', { opacity: 1, x: 0, duration: 0.18, stagger: 0.12, ease: 'none' }, '-=0.1')
-    .to('#final-prompt', { opacity: 1, duration: 0.1 }, '+=0.2')
-    .to('#hero-right', { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }, '-=0.8')
-    .to('#scroll-hint', { opacity: 1, duration: 0.4 }, '+=0.3');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wins = Array.from(document.querySelectorAll<SVGRectElement>('.sky-win'));
+  const firstLit = wins.filter(() => Math.random() < 0.36);
+
+  if (reduce) {
+    firstLit.forEach(w => w.classList.add('on'));
+  } else {
+    // evening comes on: windows light up one by one
+    firstLit.forEach(w => setTimeout(() => w.classList.add('on'), 400 + Math.random() * 3200));
+    // then the city keeps living — someone switches a light on, someone goes to sleep
+    setInterval(() => {
+      const w = wins[Math.floor(Math.random() * wins.length)];
+      if (w.classList.contains('on')) w.classList.remove('on');
+      else if (Math.random() < 0.55) w.classList.add('on');
+    }, 700);
+
+    gsap.fromTo('.hero-in',
+      { opacity: 0, y: 18 },
+      { opacity: 1, y: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out', delay: 0.15 });
+  }
 </script>

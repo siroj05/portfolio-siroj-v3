@@ -2,101 +2,82 @@
 interface Props {
   title?: string;
 }
-const { title = 'Siroojuddin Apendi' } = Astro.props;
+const { title = 'Siroojuddin Apendi — Frontend Developer' } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Frontend Developer — React.js, TypeScript, Golang" />
+    <meta name="description" content="Frontend Developer — React.js, TypeScript, Angular, Golang" />
+    <meta name="theme-color" content="#15121f" />
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
       rel="stylesheet"
     />
     <style is:global>
-      /* ── Minecraft themes (CSS custom properties) ── */
       :root {
-        --accent:       #55FF55;
-        --accent-dark:  #00AA00;
-        --accent-glow:  rgba(85,255,85,0.8);
-        --accent-glow-d:rgba(85,255,85,0.3);
-        --accent-subtle:rgba(85,255,85,0.05);
-      }
-      html[data-theme="diamond"] {
-        --accent:       #55FFFF;
-        --accent-dark:  #00AAAA;
-        --accent-glow:  rgba(85,255,255,0.8);
-        --accent-glow-d:rgba(85,255,255,0.3);
-        --accent-subtle:rgba(85,255,255,0.05);
-      }
-      html[data-theme="gold"] {
-        --accent:       #FFFF55;
-        --accent-dark:  #AAAA00;
-        --accent-glow:  rgba(255,255,85,0.8);
-        --accent-glow-d:rgba(255,255,85,0.3);
-        --accent-subtle:rgba(255,255,85,0.05);
-      }
-      html[data-theme="amethyst"] {
-        --accent:       #FF55FF;
-        --accent-dark:  #AA00AA;
-        --accent-glow:  rgba(255,85,255,0.8);
-        --accent-glow-d:rgba(255,85,255,0.3);
-        --accent-subtle:rgba(255,85,255,0.05);
-      }
-      html[data-theme="redstone"] {
-        --accent:       #FF5555;
-        --accent-dark:  #AA0000;
-        --accent-glow:  rgba(255,85,85,0.8);
-        --accent-glow-d:rgba(255,85,85,0.3);
-        --accent-subtle:rgba(255,85,85,0.05);
-      }
-      html[data-theme="lapis"] {
-        --accent:       #5555FF;
-        --accent-dark:  #0000AA;
-        --accent-glow:  rgba(85,85,255,0.8);
-        --accent-glow-d:rgba(85,85,255,0.3);
-        --accent-subtle:rgba(85,85,255,0.05);
+        --night:     21 18 31;
+        --night-2:   27 23 40;
+        --night-3:   35 29 51;
+        --line:      45 39 64;
+        --ink:       236 230 245;
+        --muted:     165 156 188;
+        --faint:     109 100 133;
+        --dusk:      185 167 230;
+        --dusk-deep: 122 102 184;
+        --lamp:      246 197 106;
+        --lamp-soft: 255 223 158;
+        --lamp-deep: 201 143 46;
+        --font-display: 'Newsreader', Georgia, serif;
+        --sky: radial-gradient(ellipse 70% 28% at 50% 100%, rgba(246,197,106,.20), transparent 72%),
+               linear-gradient(to bottom, #100d19 0%, #161228 32%, #261f40 58%, #4c3e74 82%, #7d68aa 100%);
+        --far:      #3a3058;
+        --win-off:  #241e38;
+        --win-cool: #c9b9f2;
+        --moon-dark:#1b1630;
       }
 
-      /* ── Override Tailwind accent classes with CSS vars ── */
-      .text-mc-green                 { color: var(--accent) !important; }
-      .border-mc-green               { border-color: var(--accent) !important; }
-      .bg-mc-green                   { background-color: var(--accent) !important; }
-      .text-mc-dark-green            { color: var(--accent-dark) !important; }
-      .border-mc-dark-green          { border-color: var(--accent-dark) !important; }
-      .text-glow-green               { text-shadow: 0 0 8px var(--accent-glow), 0 0 20px var(--accent-glow-d) !important; }
-      .shadow-glow-green             { box-shadow: 0 0 10px var(--accent-glow), 0 0 30px var(--accent-glow-d) !important; }
-      .hover\:shadow-glow-green:hover{ box-shadow: 0 0 10px var(--accent-glow), 0 0 30px var(--accent-glow-d) !important; }
-      .hover\:border-mc-green:hover  { border-color: var(--accent) !important; }
-      .hover\:text-mc-green:hover    { color: var(--accent) !important; }
-      .hover\:bg-mc-green:hover      { background-color: var(--accent) !important; }
-      .group:hover .group-hover\:border-mc-green { border-color: var(--accent) !important; }
-      .hover\:text-glow-green:hover { text-shadow: 0 0 8px var(--accent-glow), 0 0 20px var(--accent-glow-d) !important; }
-      .group\/link:hover .group-hover\/link\:text-glow-green { text-shadow: 0 0 8px var(--accent-glow), 0 0 20px var(--accent-glow-d) !important; }
-      .group\/link:hover .group-hover\/link\:text-mc-green { color: var(--accent) !important; }
-
-      /* selection + scrollbar follow accent */
-      ::selection { background: var(--accent); color: #0D0D0D; }
-      ::-webkit-scrollbar-thumb:hover { background: var(--accent) !important; }
-
-      /* glow text utilities (static — not theme-switched) */
-      .text-glow-yellow { text-shadow: 0 0 8px rgba(255,255,85,0.8), 0 0 20px rgba(255,255,85,0.4); }
-      .text-glow-aqua   { text-shadow: 0 0 8px rgba(85,255,255,0.7), 0 0 18px rgba(85,255,255,0.3); }
-
-      /* ── Base ── */
       html { scroll-behavior: smooth; }
       * { box-sizing: border-box; }
-      ::-webkit-scrollbar { width: 5px; }
-      ::-webkit-scrollbar-track { background: #0D0D0D; }
-      ::-webkit-scrollbar-thumb { background: #2A2A2A; }
 
-      body { background-color: #0D0D0D; }
+      body {
+        background-color: rgb(var(--night));
+        -webkit-font-smoothing: antialiased;
+      }
 
-      /* film grain overlay */
+      ::selection { background: rgb(var(--lamp)); color: rgb(var(--night)); }
+
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: rgb(var(--night)); }
+      ::-webkit-scrollbar-thumb { background: rgb(var(--line)); border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgb(var(--faint)); }
+
+      :focus-visible { outline: 2px solid rgb(var(--lamp)); outline-offset: 3px; border-radius: 2px; }
+
+      /* the small lit bulb used beside section labels */
+      .bulb {
+        display: inline-block;
+        width: 6px; height: 6px; border-radius: 50%;
+        background: rgb(var(--lamp));
+        box-shadow: 0 0 6px rgb(var(--lamp) / .9), 0 0 16px rgb(var(--lamp) / .45);
+      }
+
+      /* underline that grows from the left, for text links */
+      .link-line {
+        background-image: linear-gradient(currentColor, currentColor);
+        background-size: 0% 1px;
+        background-position: 0 100%;
+        background-repeat: no-repeat;
+        transition: background-size .35s ease, color .2s ease;
+        padding-bottom: 2px;
+      }
+      .link-line:hover { background-size: 100% 1px; }
+
+      /* film grain, keeps flat fills from looking digital */
       body::before {
         content: '';
         position: fixed;
@@ -105,18 +86,16 @@ const { title = 'Siroojuddin Apendi' } = Astro.props;
         pointer-events: none;
         opacity: 0.035;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        background-repeat: repeat;
         background-size: 200px 200px;
       }
-    </style>
 
-    <!-- apply saved theme before paint to avoid flash -->
-    <script is:inline>
-      const t = localStorage.getItem('mc-theme');
-      if (t) document.documentElement.setAttribute('data-theme', t);
-    </script>
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation: none !important; transition: none !important; }
+      }
+    </style>
   </head>
-  <body class="text-mc-white overflow-x-hidden">
+  <body class="bg-night text-ink font-sans overflow-x-hidden">
     <slot />
   </body>
 </html>

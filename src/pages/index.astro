@@ -12,8 +12,6 @@ import Contact from '../components/Contact.astro';
 
 <Layout>
   <Nav />
-  <!-- spacer for fixed nav -->
-  <div class="h-10"></div>
   <Hero />
   <About />
   <Skills />
@@ -30,27 +28,29 @@ import Contact from '../components/Contact.astro';
   gsap.registerPlugin(ScrollTrigger);
 
   function setupAnimations() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     gsap.utils.toArray<HTMLElement>('.section-block').forEach(el => {
       const prompt = el.querySelector('.section-prompt');
       if (prompt) {
         gsap.fromTo(prompt,
-          { opacity: 0, x: -12 },
+          { opacity: 0 },
           {
-            opacity: 1, x: 0, duration: 0.4, ease: 'power2.out',
-            scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+            opacity: 1, duration: 0.6, ease: 'power2.out',
+            scrollTrigger: { trigger: el, start: 'top 85%', once: true },
           }
         );
       }
+    });
 
-      el.querySelectorAll<HTMLElement>('.stagger-group').forEach(group => {
-        gsap.fromTo(group.querySelectorAll('.stagger-item'),
-          { opacity: 0, y: 14 },
-          {
-            opacity: 1, y: 0, duration: 0.35, stagger: 0.12, ease: 'power2.out',
-            scrollTrigger: { trigger: group, start: 'top 90%', once: true },
-          }
-        );
-      });
+    gsap.utils.toArray<HTMLElement>('.stagger-group').forEach(group => {
+      gsap.fromTo(group.querySelectorAll('.stagger-item'),
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out',
+          scrollTrigger: { trigger: group, start: 'top 85%', once: true },
+        }
+      );
     });
   }
 

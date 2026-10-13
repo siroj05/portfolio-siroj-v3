@@ -1,51 +1,31 @@
 ---
+import SectionLabel from './SectionLabel.astro';
 ---
 
-<section id="about" class="py-24 px-6 border-t border-mc-border section-block" style="background:#0a0a0a;">
-  <div class="max-w-6xl mx-auto">
+<section id="about" class="py-24 md:py-32 px-4 sm:px-6 section-block">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[12rem_1fr] gap-8 md:gap-12">
+    <div><SectionLabel label="About" /></div>
 
-    <div class="section-prompt mb-10 font-mono text-xs text-mc-dark-gray">
-      <span class="text-mc-green text-glow-green">▸</span>
-      <span class="ml-2 uppercase tracking-widest">About</span>
-    </div>
+    <div class="stagger-group">
+      <p class="stagger-item font-serif text-ink leading-[1.25] tracking-[-0.01em]"
+         style="font-size:clamp(1.6rem,3.4vw,2.6rem);">
+        I care about the parts people feel but rarely notice: a screen that loads
+        before you doubt it, a form that <em class="text-dusk">just works</em>, code the next
+        developer can read.
+      </p>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start stagger-group">
-
-      <div class="stagger-item">
-        <h2 class="font-minecraft text-mc-white mb-6" style="font-size:clamp(0.75rem,1.6vw,0.95rem);line-height:2;">
-          Passionate about building<br/>
-          <span class="text-mc-yellow text-glow-yellow">impactful</span> digital products.
-        </h2>
-        <p class="font-mono text-mc-gray text-sm leading-loose">
-          Frontend Developer with over
-          <span class="text-mc-aqua text-glow-aqua">3 years of experience</span>
-          in developing scalable, high-performance web and mobile applications.
-          Strong emphasis on clean, maintainable code and efficient user interactions.
+      <div class="grid sm:grid-cols-2 gap-8 mt-12 text-muted leading-relaxed">
+        <p class="stagger-item">
+          Frontend Developer with over <span class="text-ink">3 years of experience</span>
+          building scalable, high-performance web and mobile applications, with a strong
+          emphasis on clean, maintainable code and efficient user interactions.
+        </p>
+        <p class="stagger-item">
+          Skilled in <span class="text-ink">React.js, TypeScript, Angular</span> and
+          <span class="text-ink">Ionic</span>. Adaptable, and always keen to pick up a new
+          language or framework when the problem calls for it.
         </p>
       </div>
-
-      <div class="stagger-item space-y-4 font-mono text-sm">
-        <p class="text-mc-gray leading-loose">
-          Skilled in
-          <span class="text-mc-yellow">React.js</span>,
-          <span class="text-mc-yellow">TypeScript</span>,
-          <span class="text-mc-yellow">Angular</span>, and
-          <span class="text-mc-yellow">Ionic</span>.
-          Enthusiastic about learning new technologies and tackling complex challenges.
-        </p>
-        <p class="text-mc-gray leading-loose">
-          Highly adaptable and eager to explore new programming languages and frameworks
-          to build innovative digital solutions.
-        </p>
-        <div class="pt-2">
-          <a href="#contact"
-             class="inline-flex items-center gap-2 font-mono text-xs text-mc-green text-glow-green
-                    border-b border-mc-green hover:gap-3 transition-all duration-200">
-            Get in touch <span>→</span>
-          </a>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>

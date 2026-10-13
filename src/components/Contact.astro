@@ -1,76 +1,51 @@
 ---
+import SectionLabel from './SectionLabel.astro';
+
 const fields = [
-  { key: 'email',     value: 'rojudin123@gmail.com',                   href: 'mailto:rojudin123@gmail.com',                     color: 'text-mc-aqua text-glow-aqua' },
-  { key: 'phone',     value: '0813-8330-4270',                         href: 'tel:+6281383304270',                              color: 'text-mc-green text-glow-green' },
-  { key: 'location',  value: 'Tangerang, Banten — ID',                 href: null,                                              color: 'text-mc-gray' },
+  { key: 'Email',    value: 'rojudin123@gmail.com',   href: 'mailto:rojudin123@gmail.com' },
+  { key: 'Phone',    value: '0813-8330-4270',         href: 'tel:+6281383304270' },
+  { key: 'Location', value: 'Tangerang, Banten — ID', href: null },
 ];
 ---
 
-<section id="contact" class="py-24 px-6 border-t border-mc-border section-block" style="background:#0a0a0a;">
-  <div class="max-w-6xl mx-auto">
+<section id="contact" class="relative py-24 md:py-32 px-4 sm:px-6 border-t border-line section-block overflow-hidden">
+  <!-- warm spill from a lamp just out of frame -->
+  <div class="absolute inset-x-0 bottom-0 h-[60%] pointer-events-none" aria-hidden="true"
+       style="background: radial-gradient(ellipse 50% 60% at 85% 100%, rgb(var(--lamp) / .10), transparent 70%);"></div>
 
-    <div class="section-prompt mb-10 font-mono text-xs text-mc-dark-gray">
-      <span class="text-mc-green text-glow-green">▸</span>
-      <span class="ml-2 uppercase tracking-widest">Contact</span>
-    </div>
+  <div class="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[12rem_1fr] gap-8 md:gap-12">
+    <div><SectionLabel label="Contact" /></div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start stagger-group">
+    <div class="stagger-group">
+      <h2 class="stagger-item font-serif font-normal text-ink leading-[1.05] tracking-[-0.02em]"
+          style="font-size:clamp(2.4rem,6vw,4.75rem);">
+        Let's build something<br /><em class="text-lamp">together.</em>
+      </h2>
+      <p class="stagger-item text-muted mt-6 max-w-lg leading-relaxed">
+        Open for freelance projects, full-time roles, or just a conversation about tech.
+      </p>
 
-      <!-- Left: CTA text -->
-      <div class="stagger-item">
-        <h2 class="font-minecraft text-mc-white mb-4" style="font-size:clamp(0.7rem,1.5vw,0.9rem);line-height:2.2;">
-          Let's build something<br/>
-          <span class="text-mc-green text-glow-green">great</span> together.
-        </h2>
-        <p class="font-mono text-mc-gray text-sm leading-loose">
-          Open for freelance projects, full-time roles, or just a conversation about tech.
-        </p>
-        <div class="mt-6">
-          <a
-            href="mailto:rojudin123@gmail.com"
-            class="inline-flex items-center gap-2 font-mono text-xs px-6 py-3
-                   bg-mc-green text-mc-bg font-bold border border-mc-green
-                   hover:shadow-glow-green transition-all duration-200"
-          >
-            SEND EMAIL →
-          </a>
-        </div>
-      </div>
+      <a href="mailto:rojudin123@gmail.com"
+         class="stagger-item inline-block mt-10 font-serif text-2xl md:text-3xl text-ink link-line hover:text-lamp-soft"
+         style="background-size:100% 1px;">
+        rojudin123@gmail.com
+      </a>
 
-      <!-- Right: contact details -->
-      <div class="stagger-item border border-mc-border bg-[#0d0d0d] p-6
-                  hover:shadow-glow-green transition-shadow duration-500"
-           style="box-shadow:3px 3px 0 var(--accent-dark);">
-        <div class="font-mono text-mc-dark-gray text-xs mb-4">{"{"}</div>
-        {fields.map((f, i) => (
-          <div class="pl-5 mb-3 flex gap-2 flex-wrap items-center font-mono text-xs">
-            <span class="text-mc-dark-gray">"{f.key}":</span>
-            {f.href ? (
-              <a href={f.href} target={f.href.startsWith('http') ? '_blank' : undefined}
-                 class={`${f.color} hover:underline underline-offset-4 decoration-dotted`}>
-                "{f.value}"
-              </a>
-            ) : (
-              <span class={f.color}>"{f.value}"</span>
-            )}
-            {i < fields.length - 1 && <span class="text-mc-dark-gray">,</span>}
+      <dl class="stagger-item mt-14 grid sm:grid-cols-3 gap-6 border-t border-line pt-6">
+        {fields.map(f => (
+          <div>
+            <dt class="font-mono text-[0.72rem] uppercase tracking-[0.14em] text-faint">{f.key}</dt>
+            <dd class="mt-2 text-ink">
+              {f.href ? <a href={f.href} class="link-line hover:text-lamp-soft">{f.value}</a> : f.value}
+            </dd>
           </div>
         ))}
-        <div class="font-mono text-mc-dark-gray text-xs mt-1">{"}"}</div>
-      </div>
-
+      </dl>
     </div>
-
-    <!-- Footer -->
-    <div class="mt-20 pt-6 border-t border-mc-border flex flex-wrap justify-between items-center gap-4 font-mono text-xs text-mc-dark-gray stagger-group">
-      <div class="stagger-item">
-        <span class="text-mc-green">▸</span> built with
-        <span class="text-mc-white">Astro</span> +
-        <span class="text-mc-white">GSAP</span> +
-        <span class="text-mc-white">Press Start 2P</span>
-      </div>
-      <div class="stagger-item">© 2026 Siroojuddin Apendi</div>
-    </div>
-
   </div>
+
+  <footer class="relative max-w-6xl mx-auto mt-24 pt-6 border-t border-line flex flex-wrap justify-between gap-4 font-mono text-[0.72rem] text-faint">
+    <span>© 2026 Siroojuddin Apendi</span>
+    <span>Built with Astro & GSAP, somewhere in Tangerang after dark.</span>
+  </footer>
 </section>
